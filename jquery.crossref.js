@@ -13,16 +13,20 @@
         search: function(query, params) {
             var data = $.extend({ q: query }, params);
 
-            return $.getJSON('http://search.crossref.org/dois', data);
+            return $.ajaxQueue({
+                url: 'http://search.crossref.org/dois',
+                data: data,
+                dataType: 'json'
+            });
         },
 
         fetch: function(doi, format) {
             doi = doi.replace(/^http:\/\/dx\.doi\.org/, '');
 
-            return $.ajax({
+            return $.ajaxQueue({
                 url: 'http://data.crossref.org/' + doi,
                 headers: { 'Accept': format }
-            });
+            }, { priority: true });
         }
     };
 })(jQuery);
